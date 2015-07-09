@@ -24,7 +24,7 @@ And build the plugin using Maven:
 
 Then, copy JAR file to Neo4j's plugin directory!
 
-(Or just run `install.sh` (currently only works under MacOS with a Neo4j installed by Neo4j).)
+(Or just run `install.sh` (currently only works under MacOS with Neo4j installed by Homebrew).)
 
 ## Usage
 
