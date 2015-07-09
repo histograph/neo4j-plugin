@@ -15,7 +15,7 @@ public class Pit {
   private Set<Node> hairs = new HashSet<Node>();
 
   public static final Set<String> PROPERTY_KEYS_EXCLUDE = new HashSet<String>(Arrays.asList(new String[]{"created", "accessTime", "counter"}));
-  public static final Set<String> PROPERTY_KEYS_SIMPLE = new HashSet<String>(Arrays.asList(new String[]{"id", "name", "type"}));
+  public static final Set<String> PROPERTY_KEYS_SIMPLE = new HashSet<String>(Arrays.asList(new String[]{"id", "uri", "name", "type"}));
   public static final Set<String> PROPERTY_KEYS_RAW = new HashSet<String>(Arrays.asList(new String[]{"geometry", "data"}));
 
   public Pit(Node pit) {
