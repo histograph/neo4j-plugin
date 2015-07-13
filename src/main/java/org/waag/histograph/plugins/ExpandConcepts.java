@@ -26,7 +26,7 @@ import javax.ws.rs.core.Context;
 public class ExpandConcepts {
 
   private enum Rels implements RelationshipType {
-    hg_sameHgConcept, hg_isUsedFor, hg_liesIn
+    hg_sameHgConcept, hg_isUsedFor, hg_liesIn, hg_originated, hg_absorbedBy
   }
 
   private GraphDatabaseService graphDb;
@@ -57,8 +57,10 @@ public class ExpandConcepts {
     this.hairsTraversalDescription = graphDb.traversalDescription()
       .depthFirst()
       .relationships(Rels.hg_liesIn, Direction.OUTGOING)
-      .evaluator(Evaluators.fromDepth(2))
-      .evaluator(Evaluators.toDepth(2));
+      .relationships(Rels.hg_originated, Direction.OUTGOING)
+      .relationships(Rels.hg_absorbedBy, Direction.OUTGOING)
+        .evaluator(Evaluators.fromDepth(2))
+        .evaluator(Evaluators.toDepth(2));
       //.uniqueness(Uniqueness.NODE_PATH);
     //.evaluator(Evaluators.excludeStartPosition());
   }
