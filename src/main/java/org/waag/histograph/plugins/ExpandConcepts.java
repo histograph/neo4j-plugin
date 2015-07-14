@@ -26,7 +26,10 @@ import javax.ws.rs.core.Context;
 public class ExpandConcepts {
 
   private enum Rels implements RelationshipType {
-    hg_sameHgConcept, hg_isUsedFor, hg_liesIn, hg_originated, hg_absorbedBy
+    hg_sameHgConcept, hg_isUsedFor,
+    hg_liesIn,
+    hg_absorbed, hg_absorbedBy,
+    hg_originated, hg_originatedFrom
   }
 
   private GraphDatabaseService graphDb;
@@ -58,11 +61,13 @@ public class ExpandConcepts {
       .depthFirst()
       .relationships(Rels.hg_liesIn, Direction.OUTGOING)
       .relationships(Rels.hg_originated, Direction.OUTGOING)
+      .relationships(Rels.hg_originatedFrom, Direction.OUTGOING)
+      .relationships(Rels.hg_absorbed, Direction.OUTGOING)
       .relationships(Rels.hg_absorbedBy, Direction.OUTGOING)
-        .evaluator(Evaluators.fromDepth(2))
-        .evaluator(Evaluators.toDepth(2));
+      .evaluator(Evaluators.fromDepth(2))
+      .evaluator(Evaluators.toDepth(2));
       //.uniqueness(Uniqueness.NODE_PATH);
-    //.evaluator(Evaluators.excludeStartPosition());
+      //.evaluator(Evaluators.excludeStartPosition());
   }
 
   @POST
