@@ -94,12 +94,13 @@ public class ExpandConcepts {
               Concept concept = new Concept();
 
               Node node = graphDb.findNode(DynamicLabel.label("_"), "id", id);
-              concept.addPit(node);
-              visited.add(id);
 
               if (node == null) {
                 continue;
               }
+
+              concept.addPit(node);
+              visited.add(id);
 
               Traverser conceptTraverser = conceptTraversalDescription.traverse(node);
 
@@ -160,10 +161,9 @@ public class ExpandConcepts {
         jg.flush();
         jg.close();
 
-
       }
 
     };
-    return Response.ok().entity( stream ).type( MediaType.APPLICATION_JSON ).build();
+    return Response.ok().entity(stream).type( MediaType.APPLICATION_JSON ).build();
   }
 }
