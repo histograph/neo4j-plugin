@@ -26,6 +26,8 @@ Then, copy JAR file to Neo4j's plugin directory!
 
 (Or just run `install.sh` (currently only works under MacOS with Neo4j installed by Homebrew).)
 
+Alternatively, you can [directy dowload the JAR here](dist/histograph-plugin-0.0.1-SNAPSHOT.jar)
+
 ## Usage
 
     curl -s -X POST http://localhost:7474/histograph/expand \
