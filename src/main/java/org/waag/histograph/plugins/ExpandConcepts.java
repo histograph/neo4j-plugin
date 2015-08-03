@@ -26,10 +26,10 @@ import javax.ws.rs.core.Context;
 public class ExpandConcepts {
 
   private enum Rels implements RelationshipType {
-    hg_sameHgConcept, hg_isUsedFor,
-    hg_liesIn,
-    hg_absorbed, hg_absorbedBy,
-    hg_originated, hg_originatedFrom
+    sameHgConcept, isUsedFor,
+    liesIn,
+    absorbed, absorbedBy,
+    originated, originatedFrom
   }
 
   private GraphDatabaseService graphDb;
@@ -53,17 +53,16 @@ public class ExpandConcepts {
 
     this.conceptTraversalDescription = graphDb.traversalDescription()
         .breadthFirst()
-        .relationships(Rels.hg_isUsedFor, Direction.BOTH)
-        .relationships(Rels.hg_sameHgConcept, Direction.BOTH)
+        .relationships(Rels.sameHgConcept, Direction.BOTH)
         .uniqueness(Uniqueness.NODE_RECENT);
 
     this.hairsTraversalDescription = graphDb.traversalDescription()
       .depthFirst()
-      .relationships(Rels.hg_liesIn, Direction.OUTGOING)
-      .relationships(Rels.hg_originated, Direction.OUTGOING)
-      .relationships(Rels.hg_originatedFrom, Direction.OUTGOING)
-      .relationships(Rels.hg_absorbed, Direction.OUTGOING)
-      .relationships(Rels.hg_absorbedBy, Direction.OUTGOING)
+      .relationships(Rels.liesIn, Direction.OUTGOING)
+      .relationships(Rels.originated, Direction.OUTGOING)
+      .relationships(Rels.originatedFrom, Direction.OUTGOING)
+      .relationships(Rels.absorbed, Direction.OUTGOING)
+      .relationships(Rels.absorbedBy, Direction.OUTGOING)
       .evaluator(Evaluators.fromDepth(2))
       .evaluator(Evaluators.toDepth(2));
       //.uniqueness(Uniqueness.NODE_PATH);
@@ -160,10 +159,8 @@ public class ExpandConcepts {
         jg.writeEndArray();
         jg.flush();
         jg.close();
-
       }
-
     };
-    return Response.ok().entity(stream).type( MediaType.APPLICATION_JSON ).build();
+    return Response.ok().entity(stream).type(MediaType.APPLICATION_JSON).build();
   }
 }
