@@ -26,7 +26,7 @@ import javax.ws.rs.core.Context;
 public class ExpandConcepts {
 
   private enum Rels implements RelationshipType {
-    sameHgConcept, isUsedFor,
+    sameHgConcept,
     liesIn,
     absorbed, absorbedBy,
     originated, originatedFrom
@@ -39,12 +39,20 @@ public class ExpandConcepts {
   private TraversalDescription hairsTraversalDescription;
 
   private boolean isPit(Node node) {
+    boolean hasUnderscore = false;
+
     for (Label label: node.getLabels()) {
-      if (label.name().equals("_Rel")) {
-        return false;
+      final String n = label.name();
+
+      if(n.equals("_")) {
+        hasUnderscore = true;
+        continue;
       }
+
+      if(n.equals("_Rel") || n.equals("="))
+        return false;
     }
-    return true;
+    return hasUnderscore;
   }
 
   public ExpandConcepts(@Context GraphDatabaseService graphDb) {
