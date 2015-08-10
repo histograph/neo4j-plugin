@@ -25,18 +25,8 @@ import javax.ws.rs.core.Context;
 @javax.ws.rs.Path( "/expand" )
 public class ExpandConcepts {
 
-  private enum Rels implements RelationshipType {
-    sameHgConcept,
-    liesIn,
-    absorbed, absorbedBy,
-    originated, originatedFrom
-  }
-
   private GraphDatabaseService graphDb;
   private final ObjectMapper objectMapper;
-
-  private TraversalDescription conceptTraversalDescription;
-  private TraversalDescription hairsTraversalDescription;
 
   private boolean isPit(Node node) {
     boolean hasUnderscore = false;
@@ -58,23 +48,6 @@ public class ExpandConcepts {
   public ExpandConcepts(@Context GraphDatabaseService graphDb) {
     this.graphDb = graphDb;
     this.objectMapper = new ObjectMapper();
-
-    this.conceptTraversalDescription = graphDb.traversalDescription()
-        .breadthFirst()
-        .relationships(Rels.sameHgConcept, Direction.BOTH)
-        .uniqueness(Uniqueness.NODE_RECENT);
-
-    this.hairsTraversalDescription = graphDb.traversalDescription()
-      .depthFirst()
-      .relationships(Rels.liesIn, Direction.OUTGOING)
-      .relationships(Rels.originated, Direction.OUTGOING)
-      .relationships(Rels.originatedFrom, Direction.OUTGOING)
-      .relationships(Rels.absorbed, Direction.OUTGOING)
-      .relationships(Rels.absorbedBy, Direction.OUTGOING)
-      .evaluator(Evaluators.fromDepth(2))
-      .evaluator(Evaluators.toDepth(2));
-      //.uniqueness(Uniqueness.NODE_PATH);
-      //.evaluator(Evaluators.excludeStartPosition());
   }
 
   @POST
@@ -90,9 +63,22 @@ public class ExpandConcepts {
 
         ExpandParameters parameters = objectMapper.readValue(jp, ExpandParameters.class);
 
-        JsonGenerator jg = objectMapper.getJsonFactory().createJsonGenerator( os, JsonEncoding.UTF8 );
+        JsonGenerator jg = objectMapper.getJsonFactory().createJsonGenerator(os, JsonEncoding.UTF8);
 
         ArrayList<String> visited = new ArrayList<String>();
+
+        TraversalDescription conceptTraversalDescription = graphDb.traversalDescription()
+            .breadthFirst()
+            .relationships(DynamicRelationshipType.withName(parameters.equivalence), Direction.BOTH)
+            .uniqueness(Uniqueness.NODE_RECENT);
+
+        TraversalDescription hairsTraversalDescription = graphDb.traversalDescription()
+            .depthFirst();
+        for (String relation : parameters.hairs) {
+          hairsTraversalDescription = hairsTraversalDescription.relationships(DynamicRelationshipType.withName(relation), Direction.OUTGOING);
+        }
+        hairsTraversalDescription = hairsTraversalDescription.evaluator(Evaluators.fromDepth(2))
+            .evaluator(Evaluators.toDepth(2));
 
         jg.writeStartArray();
         try (Transaction tx = graphDb.beginTx()) {
