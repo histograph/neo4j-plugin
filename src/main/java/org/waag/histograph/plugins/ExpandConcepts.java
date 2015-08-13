@@ -57,7 +57,7 @@ public class ExpandConcepts {
     StreamingOutput stream = new StreamingOutput() {
       @Override
       public void write(OutputStream os) throws IOException, WebApplicationException {
-        os.write("pong".getBytes(Charset.forName("UTF-8")));
+        os.write("pong\n".getBytes(Charset.forName("UTF-8")));
       }
     };
     return Response.ok().entity(stream).type(MediaType.TEXT_PLAIN).build();
