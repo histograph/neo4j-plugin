@@ -26,19 +26,33 @@ Then, copy JAR file to Neo4j's plugin directory!
 
 (Or just run `install.sh` (currently only works under MacOS with Neo4j installed by Homebrew).)
 
-Alternatively, you can [directy dowload the JAR here](dist/histograph-plugin-0.0.1-SNAPSHOT.jar)
+Alternatively, you can [directy dowload a compiled JAR](dist/histograph-plugin-0.5.0-SNAPSHOT.jar) from GitHub.
+
+## Ping 🎾
+
+To test if plugin is properly installed and loaded by Neo4j, run:
+
+    curl http://localhost:7474/histograph/ping
+
+The plugin should respond with:
+
+    pong
 
 ## Usage
 
     curl -s -X POST http://localhost:7474/histograph/expand \
       -H "Content-Type: application/json" \
-      -d '{"ids": ["urn:hg:geonames:2759794", "urn:hg:geonames:2753637", "urn:hg:geonames:2753639", "urn:hg:geonames:2753638", "urn:hg:geonames:2753640", "urn:hg:tgn:7264696", "urn:hg:tgn:term:1001511217", "urn:hg:geonames:2753636", "urn:hg:tgn:7264697", "urn:hg:tgn:7264700", "urn:hg:tgn:term:1001493884"]}' \
+      -d '{"equivalence":"hg:sameHgConcept", "hairs":["hg:liesIn"], "ids": ["urn:hg:geonames:2759794", "urn:hg:geonames:2753637", "urn:hg:geonames:2753639", "urn:hg:geonames:2753638", "urn:hg:geonames:2753640", "urn:hg:tgn:7264696", "urn:hg:tgn:term:1001511217", "urn:hg:geonames:2753636", "urn:hg:tgn:7264697", "urn:hg:tgn:7264700", "urn:hg:tgn:term:1001493884"]}' \
     | python -mjson.tool | pygmentize -l js
 
 The plugin exposes a single endpoint - `/histograph/expand` - and expects a POST request with a JSON body of the following form:
 
 ```json
 {
+  "equivalence": "hg:sameHgConcept",
+  "hairs": [
+    "hg:liesIn"
+  ],
   "ids": [
     "urn:hg:geonames:2759794",
     "urn:hg:geonames:2753637",
