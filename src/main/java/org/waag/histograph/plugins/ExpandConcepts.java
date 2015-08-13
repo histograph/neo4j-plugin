@@ -18,11 +18,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import javax.ws.rs.core.Context;
 
-@javax.ws.rs.Path( "/expand" )
+@javax.ws.rs.Path( "/" )
 public class ExpandConcepts {
 
   private GraphDatabaseService graphDb;
@@ -50,9 +51,21 @@ public class ExpandConcepts {
     this.objectMapper = new ObjectMapper();
   }
 
+  @GET
+  @javax.ws.rs.Path("/ping")
+  public Response ping(@Context HttpServletRequest request, final InputStream requestBody) {
+    StreamingOutput stream = new StreamingOutput() {
+      @Override
+      public void write(OutputStream os) throws IOException, WebApplicationException {
+        os.write("pong".getBytes(Charset.forName("UTF-8")));
+      }
+    };
+    return Response.ok().entity(stream).type(MediaType.TEXT_PLAIN).build();
+  }
+
   @POST
-  @javax.ws.rs.Path("/")
-  public Response chips(@Context HttpServletRequest request, final InputStream requestBody) {
+  @javax.ws.rs.Path("/expand")
+  public Response expand(@Context HttpServletRequest request, final InputStream requestBody) {
     StreamingOutput stream = new StreamingOutput() {
 
       @Override
