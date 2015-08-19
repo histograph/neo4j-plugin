@@ -28,7 +28,7 @@ Then, copy JAR file to Neo4j's plugin directory!
 
 Alternatively, you can [directy dowload a compiled JAR](dist/histograph-plugin-0.5.0-SNAPSHOT.jar) from GitHub.
 
-## Ping 🎾
+## Ping
 
 To test if plugin is properly installed and loaded by Neo4j, run:
 
