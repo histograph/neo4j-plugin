@@ -5,12 +5,10 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Concept {
+public class Concept implements Comparable<Concept> {
+
   private Map<String, Pit> pits = new HashMap<String, Pit>();
 
   public void addPit(Node node) {
@@ -47,5 +45,14 @@ public class Concept {
       nodeList.add(pit.getNode());
     }
     return nodeList;
+  }
+
+  public int size() {
+    return pits.size();
+  }
+
+  @Override
+  public int compareTo(Concept c) {
+    return c.size() - size();
   }
 }

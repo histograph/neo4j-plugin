@@ -20,6 +20,7 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.ws.rs.core.Context;
 
@@ -95,6 +96,8 @@ public class ExpandConcepts {
 
         jg.writeStartArray();
         try (Transaction tx = graphDb.beginTx()) {
+          ArrayList<Concept> concepts = new ArrayList<Concept>();
+
           for (String id : parameters.ids) {
             if (!visited.contains(id)) {
               Concept concept = new Concept();
@@ -158,8 +161,13 @@ public class ExpandConcepts {
                 concept.addHair(startNodeId, relation, endNode);
               }
 
-              concept.toJson(jg);
+              concepts.add(concept);
             }
+          }
+
+          Collections.sort(concepts);
+          for (Concept concept: concepts) {
+            concept.toJson(jg);
           }
         }
 
