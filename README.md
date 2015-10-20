@@ -193,3 +193,4 @@ Example output of a single street in lovely Bussum. Response is an array of Hist
 ]
 ```
 
+Copyright (C) 2015 [Waag Society](http://waag.org).
