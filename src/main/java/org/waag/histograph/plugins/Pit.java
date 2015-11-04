@@ -9,10 +9,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Pit {
+public class Pit implements Comparable<Pit> {
   private Node pit;
   private Set<Relationship> relations = new HashSet<Relationship>();
   private Set<Node> hairs = new HashSet<Node>();
+
+  private int incomingCount = 0;
 
   public static final Set<String> PROPERTY_KEYS_EXCLUDE = new HashSet<String>(Arrays.asList(new String[]{"created", "accessTime", "counter"}));
   public static final Set<String> PROPERTY_KEYS_SIMPLE = new HashSet<String>(Arrays.asList(new String[]{"id", "uri", "name", "type"}));
@@ -30,6 +32,8 @@ public class Pit {
     relations.add(relation);
     hairs.add(node);
   }
+
+  public Set<Relationship> getRelations() { return relations; }
 
   public Node getNode() {
     return pit;
@@ -90,5 +94,18 @@ public class Pit {
     jg.writeStringField("type", type);
 
     jg.writeEndObject();
+  }
+
+  public void incrementIncomingCount() {
+    incomingCount++;
+  }
+
+  public int getIncomingCount() {
+    return incomingCount;
+  }
+
+  @Override
+  public int compareTo(Pit p) {
+    return p.getIncomingCount() - getIncomingCount();
   }
 }

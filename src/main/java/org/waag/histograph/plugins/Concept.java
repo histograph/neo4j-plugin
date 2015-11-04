@@ -32,8 +32,22 @@ public class Concept implements Comparable<Concept> {
   }
 
   public void toJson(JsonGenerator jg) throws IOException {
+    for (String id: pits.keySet()) {
+      Pit pit = pits.get(id);
+
+      for (Relationship relation: pit.getRelations()) {
+        String toId = relation.getEndNode().getProperty("id").toString();
+        Pit toPit = pits.get(toId);
+        if (toPit != null) {
+          toPit.incrementIncomingCount();
+        }
+      }
+    }
+
+    List<Pit> pitValues = new ArrayList(pits.values());
+    Collections.sort(pitValues);
     jg.writeStartArray();
-    for (Pit pit : pits.values()) {
+    for (Pit pit : pitValues) {
       pit.toJson(jg);
     }
     jg.writeEndArray();
