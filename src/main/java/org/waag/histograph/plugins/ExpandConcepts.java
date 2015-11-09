@@ -165,7 +165,8 @@ public class ExpandConcepts {
             }
           }
 
-          Collections.sort(concepts);
+          // TODO: sort concepts on relavance: Elasticsearch hits per concept, multiplied by ES score
+          //Collections.sort(concepts);
           for (Concept concept: concepts) {
             concept.toJson(jg);
           }
